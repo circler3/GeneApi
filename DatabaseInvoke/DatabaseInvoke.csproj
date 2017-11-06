@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="mysql.data" Version="6.10.4" />
+    <PackageReference Include="npgsql" Version="3.2.5" />
+    <PackageReference Include="oracle.manageddataaccess" Version="12.2.1100" />
+    <PackageReference Include="system.data.sqlclient" Version="4.4.0" />
+    <PackageReference Include="system.data.sqlite" Version="1.0.106" />
+    <PackageReference Include="system.data.sqlite.core" Version="1.0.106" />
+  </ItemGroup>
+
+</Project>
