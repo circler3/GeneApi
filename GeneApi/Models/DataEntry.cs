@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,23 +9,14 @@ namespace GeneApi.Models
 {
     public class DataEntry
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public List<int[]> GenesList{ get; set; }
-        public Dictionary<string, List<int[]>> SourceDictionary { get; set; }
-        public Dictionary<string, float> ResultDictionary { get; set; }
-        /// <summary>
-        /// GeneNameList
-        /// </summary>
-        public List<string> GeneNameList { get; set; }
-        public string Applier { get; set; }
-
-        public DataEntry()
-        {
-            SourceDictionary = new Dictionary<string, List<int[]>>();
-            ResultDictionary = new Dictionary<string, float>();
-            GenesList = new List<int[]>();
-            GeneNameList = new List<string>();
-        }
+        public string user { get; set; }
+        public string sample { get; set; }
+        public string company { get; set; }
+        public string type { get; set; }
+        [JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime updateAt { get; set; }
+        [JsonConverter(typeof(IsoDateTimeConverter))]
+        public DateTime　createAt { get; set; }
+        public Dictionary<string, int[]> data { get; set; }
     }
 }
