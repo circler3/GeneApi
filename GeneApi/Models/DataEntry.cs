@@ -12,6 +12,10 @@ namespace GeneApi.Models
         public List<int[]> GenesList{ get; set; }
         public Dictionary<string, List<int[]>> SourceDictionary { get; set; }
         public Dictionary<string, float> ResultDictionary { get; set; }
+        /// <summary>
+        /// GeneNameList
+        /// </summary>
+        public List<string> GeneNameList { get; set; }
         public string Applier { get; set; }
 
         public DataEntry()
@@ -19,6 +23,7 @@ namespace GeneApi.Models
             SourceDictionary = new Dictionary<string, List<int[]>>();
             ResultDictionary = new Dictionary<string, float>();
             GenesList = new List<int[]>();
+            GeneNameList = new List<string>();
         }
     }
 }

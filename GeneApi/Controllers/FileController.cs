@@ -21,16 +21,18 @@ namespace GeneApi.Controllers
         private static Dictionary<string, DataEntry> profileDictionary = new Dictionary<string, DataEntry>();
         // GET: api/File
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult Get([FromQuery]string nameofComparer)
         {
-            return new string[] { "value1", "value2" };
+            var entry = profileDictionary[HttpContext.Session.GetString("ProfileID")];
+            
+            return new JsonResult(profileDictionary[HttpContext.Session.GetString("ProfileID")]);
         }
 
         // GET: api/File/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public ActionResult Get(string id, [FromQuery]string nameofComparer)
         {
-            return "value";
+            return new JsonResult(profileDictionary[id]);
         }
 
         // POST: api/File
@@ -72,6 +74,10 @@ namespace GeneApi.Controllers
                 {
                     sm.Init();
                     var result = sm.ExcuteQuery($"select * from {type}");
+                    for (int i = 1; i< result.Columns.Count; i++)
+                    {
+                        entry.GeneNameList.Add(result.Columns[i].ColumnName);
+                    }
                     foreach (System.Data.DataRow n in result.Rows)
                     {
                         var name = n[0].ToString();
