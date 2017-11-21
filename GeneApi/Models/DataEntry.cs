@@ -17,6 +17,6 @@ namespace GeneApi.Models
         public DateTime updateAt { get; set; }
         [JsonConverter(typeof(IsoDateTimeConverter))]
         public DateTime　createAt { get; set; }
-        public Dictionary<string, int[]> data { get; set; }
+        public List<object> data { get; set; }
     }
 }

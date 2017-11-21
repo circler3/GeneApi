@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneApi", "GeneApi\GeneApi.csproj", "{DDF799E7-539D-4597-A102-302F76F584F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iTextSharp.LGPLv2.Core", "..\..\..\..\Desktop\iTextSharp.LGPLv2.Core\src\iTextSharp.LGPLv2.Core\iTextSharp.LGPLv2.Core.csproj", "{BEDBA16B-7EFB-4C8C-82CA-E475BEC8C2A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DDF799E7-539D-4597-A102-302F76F584F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDF799E7-539D-4597-A102-302F76F584F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDF799E7-539D-4597-A102-302F76F584F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDBA16B-7EFB-4C8C-82CA-E475BEC8C2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDBA16B-7EFB-4C8C-82CA-E475BEC8C2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDBA16B-7EFB-4C8C-82CA-E475BEC8C2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDBA16B-7EFB-4C8C-82CA-E475BEC8C2A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
