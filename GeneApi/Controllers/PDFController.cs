@@ -12,6 +12,8 @@ using System.IO;
 using System.Reflection;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Cors;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace GeneApi.Controllers
 {
@@ -22,9 +24,9 @@ namespace GeneApi.Controllers
     {
         // GET: api/PDF
         [HttpGet]
-        public ActionResult Get()
+        public string Get()
         {
-            return Post(null);
+            return "AVB";
         }
 
         // GET: api/PDF/5
@@ -39,7 +41,20 @@ namespace GeneApi.Controllers
         [EnableCors("any")]
         public ActionResult Post(IFormCollection collection)
         {
-            string[] name = collection["name"];
+            string name = collection["name"];
+            string[] names = name.Split(',');
+
+            string result = collection["result"];
+            string[] results = result.Split(',');
+
+            string sample = collection["sample"];
+            string type = collection["type"];
+
+            var client = new MongoClient("mongodb://222.31.160.146:27017");
+            var database = client.GetDatabase("gene");
+            var source = database.GetCollection<BsonDocument>("jujubenews");
+            var filter = Builders<BsonDocument>.Filter.Eq("sample", sample);
+            dynamic target = source.Find(filter).FirstOrDefault() ;
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -54,26 +69,26 @@ namespace GeneApi.Controllers
                 //内容填充字段
                 pdfFormFields.SetField("送检编号", "1");
                 pdfFormFields.SetField("送检单位", "1");
-                pdfFormFields.SetField("样品名称", "2");
-                pdfFormFields.SetField("鉴定项目", "3");
-                pdfFormFields.SetField("鉴定单位", "4");
-                pdfFormFields.SetField("年", "5");
-                pdfFormFields.SetField("月", "6");
-                pdfFormFields.SetField("日", "7");
+                pdfFormFields.SetField("样品名称", sample);
+                pdfFormFields.SetField("鉴定项目", "SSR");
+                pdfFormFields.SetField("鉴定单位", "北京林业大学");
+                pdfFormFields.SetField("年", DateTime.Now.Year.ToString());
+                pdfFormFields.SetField("月", DateTime.Now.Month.ToString());
+                pdfFormFields.SetField("日", DateTime.Now.Day.ToString());
                 pdfFormFields.SetField("样品编号", "8");
                 pdfFormFields.SetField("样品数量", "9");
-                pdfFormFields.SetField("样品形态", "10");
-                pdfFormFields.SetField("基因对数", "10");
-                pdfFormFields.SetField("树种", "11");
-                pdfFormFields.SetField("相似系数低", "12");
-                pdfFormFields.SetField("相似系数高", "13");
-                pdfFormFields.SetField("最高目标品种名称", "14");
-                pdfFormFields.SetField("最高相似度", "15");
-                pdfFormFields.SetField("相同不同", "16");
-                pdfFormFields.SetField("联系人", "17");
-                pdfFormFields.SetField("联系电话", "18");
-                pdfFormFields.SetField("主检人", "19");
-                pdfFormFields.SetField("技术负责人", "20");
+                pdfFormFields.SetField("样品形态", "凝胶");
+                pdfFormFields.SetField("基因对数", target.data.Count);
+                pdfFormFields.SetField("树种", type);
+                pdfFormFields.SetField("相似系数低", results[results.Length - 1] + "%");
+                pdfFormFields.SetField("相似系数高", results[0] + "%");
+                pdfFormFields.SetField("最高目标品种名称", names[0]);
+                pdfFormFields.SetField("最高相似度", results[0] + "%");
+                pdfFormFields.SetField("相同不同", result[0]==1 ? "相同":"不同");
+                pdfFormFields.SetField("联系人", "admin");
+                pdfFormFields.SetField("联系电话", "1861234567");
+                pdfFormFields.SetField("主检人", "admin");
+                pdfFormFields.SetField("技术负责人", "admin");
 
                 pdfStamper.FormFlattening = true;//设置true PDF文件不能编辑
                 reader.Close();

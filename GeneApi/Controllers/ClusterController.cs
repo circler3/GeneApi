@@ -31,7 +31,7 @@ namespace GeneApi.Controllers
             var database = client.GetDatabase("gene");
             var collection = database.GetCollection<BsonDocument>("libraries");
             var tempcollection = database.GetCollection<BsonDocument>("jujubenews");
-            var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse("5a13f6d78f3bcd208fdeb302"));
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
             dynamic target = tempcollection.Find(filter).First();
             var type = target["type"];
             filter = Builders<BsonDocument>.Filter.Eq("type", type);
