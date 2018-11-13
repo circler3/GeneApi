@@ -54,7 +54,7 @@ namespace GeneApi.Controllers
             var database = client.GetDatabase("gene");
             var source = database.GetCollection<BsonDocument>("jujubenews");
             var filter = Builders<BsonDocument>.Filter.Eq("sample", sample);
-            dynamic target = source.Find(filter).FirstOrDefault() ;
+            var target = source.Find(filter).FirstOrDefault() ;
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -67,8 +67,8 @@ namespace GeneApi.Controllers
                 pdfFormFields.AddSubstitutionFont(baseFT);//设置域的字体;生成文件几十K
 
                 //内容填充字段
-                pdfFormFields.SetField("送检编号", "1");
-                pdfFormFields.SetField("送检单位", "1");
+                pdfFormFields.SetField("送检编号", target.GetValue("_id").ToString());
+                pdfFormFields.SetField("送检单位", target.GetValue("company").ToString());
                 pdfFormFields.SetField("样品名称", sample);
                 pdfFormFields.SetField("鉴定项目", "SSR");
                 pdfFormFields.SetField("鉴定单位", "北京林业大学");
@@ -78,13 +78,13 @@ namespace GeneApi.Controllers
                 pdfFormFields.SetField("样品编号", "8");
                 pdfFormFields.SetField("样品数量", "9");
                 pdfFormFields.SetField("样品形态", "凝胶");
-                pdfFormFields.SetField("基因对数", target.data.Count);
+                pdfFormFields.SetField("基因对数", target.GetValue("data").AsBsonArray.Count.ToString());
                 pdfFormFields.SetField("树种", type);
                 pdfFormFields.SetField("相似系数低", results[results.Length - 1] + "%");
                 pdfFormFields.SetField("相似系数高", results[0] + "%");
                 pdfFormFields.SetField("最高目标品种名称", names[0]);
                 pdfFormFields.SetField("最高相似度", results[0] + "%");
-                pdfFormFields.SetField("相同不同", result[0]==1 ? "相同":"不同");
+                pdfFormFields.SetField("相同不同", results[0] == "100.00" ? "相同":"不同");
                 pdfFormFields.SetField("联系人", "admin");
                 pdfFormFields.SetField("联系电话", "1861234567");
                 pdfFormFields.SetField("主检人", "admin");

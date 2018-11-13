@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Cors;
 
 namespace GeneApi.Controllers
 {
@@ -24,15 +25,16 @@ namespace GeneApi.Controllers
         }
 
         // GET: api/Cluster/5
-        [HttpGet("{id}")]
-        public ActionResult Get(string id)
+        [HttpGet("{name}")]
+        [EnableCors("any")]
+        public ActionResult Get(string name)
         {
             var client = new MongoClient("mongodb://222.31.160.146:27017");
             var database = client.GetDatabase("gene");
             var collection = database.GetCollection<BsonDocument>("libraries");
             var tempcollection = database.GetCollection<BsonDocument>("jujubenews");
-            var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-            dynamic target = tempcollection.Find(filter).First();
+            var filter = Builders<BsonDocument>.Filter.Eq("sample", name);
+            dynamic target = tempcollection.Find(filter).FirstOrDefault();
             var type = target["type"];
             filter = Builders<BsonDocument>.Filter.Eq("type", type);
 
@@ -137,9 +139,60 @@ namespace GeneApi.Controllers
         }
 
         // POST: api/Cluster
+        [EnableCors("any")]
         [HttpPost]
-        public void Post([FromBody]string value)
+        public ActionResult Post()
         {
+            var name = Request.Form["name"].ToString();
+            var client = new MongoClient("mongodb://222.31.160.146:27017");
+            var database = client.GetDatabase("gene");
+            var collection = database.GetCollection<BsonDocument>("libraries");
+            var tempcollection = database.GetCollection<BsonDocument>("jujubenews");
+            var filter = Builders<BsonDocument>.Filter.Eq("sample", name);
+            dynamic target = tempcollection.Find(filter).FirstOrDefault();
+            var type = target["type"];
+            filter = Builders<BsonDocument>.Filter.Eq("type", type);
+
+            var sources = collection.Find(filter).ToList();
+            Dictionary<string, float> dictionary = new Dictionary<string, float>();
+            foreach (var n in sources)
+            {
+                var match = 0;
+                var count = target["data"].Count;
+                var tar = target["data"].ToList();
+                for (int i = 0; i < count; i++)
+                {
+                    if (tar[i][1] == tar[i][2])
+                    {
+                        if (tar[i][1] == n["data"][i][1])
+                        {
+                            match++;
+                        }
+                        if (tar[i][1] == n["data"][i][2])
+                        {
+                            match++;
+                        }
+                    }
+                    else
+                    {
+                        if (tar[i][1] == n["data"][i][1] || tar[i][1] == n["data"][i][2])
+                        {
+                            match++;
+                        }
+                        if (tar[i][2] == n["data"][i][1] || tar[i][2] == n["data"][i][2])
+                        {
+                            match++;
+                        }
+                    }
+                }
+                dictionary[n["sample"].AsString] = match / ((float)count * 2);
+            }
+
+            var list = dictionary.ToList();
+            var node = new Models.TreeNode() { kv = list };
+            Sort(node);
+
+            return new JsonResult(BuildTree(node));
         }
 
         // PUT: api/Cluster/5

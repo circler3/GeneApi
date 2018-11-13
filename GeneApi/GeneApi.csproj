@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="EppLUS.core" Version="1.5.2" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
@@ -19,10 +20,6 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Desktop\iTextSharp.LGPLv2.Core\src\iTextSharp.LGPLv2.Core\iTextSharp.LGPLv2.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
